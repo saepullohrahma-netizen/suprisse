@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Ulang Tahun Sayang! 🎉</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef, #a1c4fd);
+            background-size: 300% 300%;
+            animation: gradientBG 10s ease infinite;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            margin: 0;
+            color: #4a4a4a;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .card-custom {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 25px;
+            padding: 35px 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn-custom {
+            background: linear-gradient(45deg, #ff758c, #ff7eb3);
+            border: none;
+            color: white;
+            padding: 14px 32px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4);
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 12px 25px rgba(255, 117, 140, 0.6);
+            color: white;
+        }
+
+        /* Kue Ulang Tahun CSS */
+        .cake-container {
+            position: relative;
+            width: 150px;
+            height: 140px;
+            margin: 20px auto 30px;
+            cursor: pointer;
+        }
+
+        .cake-layer {
+            position: absolute;
+            width: 100%;
+            background: #ffb3c1;
+            border-radius: 15px 15px 10px 10px;
+            box-shadow: inset 0 -5px 0 rgba(0,0,0,0.08);
+        }
+
+        .layer-bottom {
+            bottom: 0;
+            height: 50px;
+            background: #ff85a1;
+        }
+
+        .layer-middle {
+            bottom: 45px;
+            left: 10px;
+            width: 130px;
+            height: 45px;
+            background: #fbb1bd;
+        }
+
+        .layer-top {
+            bottom: 85px;
+            left: 20px;
+            width: 110px;
+            height: 40px;
+            background: #f72585;
+        }
+
+        /* Lilin & Api */
+        .candle {
+            position: absolute;
+            bottom: 125px;
+            left: 67px;
+            width: 16px;
+            height: 35px;
+            background: repeating-linear-gradient(45deg, #fff, #fff 5px, #4cc9f0 5px, #4cc9f0 10px);
+            border-radius: 4px 4px 0 0;
+            z-index: 2;
+        }
+
+        .flame {
+            position: absolute;
+            bottom: 160px;
+            left: 70px;
+            width: 10px;
+            height: 20px;
+            background: #ff9e00;
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 15px #ff9e00, 0 0 25px #ff0000;
+            animation: flicker 0.6s infinite alternate;
+            z-index: 3;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .flame.off {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.5);
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-2deg); }
+            100% { transform: scale(1.1) rotate(2deg); }
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .balloon {
+            position: absolute;
+            font-size: 2.5rem;
+            user-select: none;
+            animation: floatUp 8s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        .ucapan-box {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 18px;
+            padding: 20px;
+            text-align: left;
+            max-height: 280px;
+            overflow-y: auto;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Balon Melayang -->
+    <div class="balloon" style="left: 10%; animation-delay: 0s;">🎈</div>
+    <div class="balloon" style="left: 30%; animation-delay: 2.5s;">🎁</div>
+    <div class="balloon" style="left: 70%; animation-delay: 1s;">💐</div>
+    <div class="balloon" style="left: 85%; animation-delay: 4s;">🎈</div>
+
+    <div class="card-custom">
+        <!-- LANGKAH 1: Input Nama -->
+        <div id="step1" class="step active">
+            <h2 class="fw-bold mb-3">Siapa Yang Ulang Tahun Hari Ini? 🎂</h2>
+            <p class="text-secondary mb-4">Ketik nama panggilan kamu dulu ya sayang!</p>
+            <div class="mb-4">
+                <input type="text" id="inputNama" class="form-control form-control-lg text-center shadow-none border-0" style="background: rgba(255,255,255,0.8);" placeholder="Ketik di sini..." required>
+            </div>
+            <button onclick="mulaiAcara()" class="btn btn-custom w-100">Buka Kejutan ✨</button>
+        </div>
+
+        <!-- LANGKAH 2: Tiup Lilin -->
+        <div id="step2" class="step">
+            <h3 class="fw-bold text-danger mb-2" id="teksSapaan"></h3>
+            <p class="text-secondary">Klik pada **api lilin** atau kue buat tiup lilinnya! 🕯️</p>
+            
+            <div class="cake-container" onclick="tiupLilin()">
+                <div class="flame" id="flame"></div>
+                <div class="candle"></div>
+                <div class="cake-layer layer-top"></div>
+                <div class="cake-layer layer-middle"></div>
+                <div class="cake-layer layer-bottom"></div>
+            </div>
+
+            <p class="small text-muted" id="instruksiTiup">(Ketuk kuenya buat tiup lilin)</p>
+        </div>
+
+        <!-- LANGKAH 3: Surat Ucapan & Kembang Api -->
+        <div id="step3" class="step">
+            <h2 class="fw-bold text-danger mb-1">HAPPY 17TH BIRTHDAY! 🎂🥳</h2>
+            <h4 class="fw-bold text-primary mb-3" id="namaAkhir"></h4>
+            
+            <div class="ucapan-box my-3 shadow-sm">
+                <p class="mb-2">Happyyyy brithdayyyyy sayangggggkuuuuu yanggggg keeee 17 tahunnnnn, semogaaaa diii umurrrr kaliiii iniiii hidupppp adikkkk serbaaaa diii mudahhhh kannnn Aminnnn 🙏✨</p>
+                
+                <p class="mb-2">Semogaaaa rezekiiii adikkkk diii lancarrrr kannnn, diii sehattt kannn badannn nyaaaaa diii panjangggg kannn umurrrr nyaaaa diii ijabahhhh semuaaaa doaaa nyaaaaa. Apalagiii yaaaa??? Segituuuu duluuu ajaaa yangggg bisaaaa diii ungkapiinnn hehehehhee 😄</p>
+                
+                <p class="mb-2">Tetepppp jadiiii pribadiiii yangggg abangggg kenallll yaaaa sayanggggggkuuuuuu. Semogaaaa hariiii hariiii adikkkk diii penuhiiii senyumannnn yaaaa sayangggggg.</p>
+                
+                <p class="mb-0 text-center fw-bold text-danger mt-3 fs-5">Woopppppppyuuuuuui banyakkkk banyakkkk MUACHHHHH 😙🫶🏻💐🥳🕊️</p>
+            </div>
+
+            <button onclick="location.reload()" class="btn btn-outline-danger btn-sm rounded-pill mt-2 px-4">Ulangi 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        let namaUtama = "";
+
+        // Fungsi Suara Menggunakan Web Audio API
+        function playTone(freq, duration, type = 'sine') {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function playHappyBirthdaySong() {
+            const notes = [
+                {f: 264, d: 0.3}, {f: 264, d: 0.3}, {f: 297, d: 0.6}, {f: 264, d: 0.6}, {f: 352, d: 0.6}, {f: 330, d: 1.0},
+                {f: 264, d: 0.3}, {f: 264, d: 0.3}, {f: 297, d: 0.6}, {f: 264, d: 0.6}, {f: 396, d: 0.6}, {f: 352, d: 1.0}
+            ];
+            let delay = 0;
+            notes.forEach(note => {
+                setTimeout(() => {
+                    playTone(note.f, note.d);
+                }, delay * 1000);
+                delay += note.d + 0.1;
+            });
+        }
+
+        function mulaiAcara() {
+            const input = document.getElementById('inputNama').value.trim();
+            if (input === "") {
+                alert("Isi nama dulu ya sayang!");
+                return;
+            }
+            namaUtama = input;
+            playTone(523, 0.2);
+
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step2').classList.add('active');
+            document.getElementById('teksSapaan').innerText = `Make a Wish, ${namaUtama}! ✨`;
+        }
+
+        function tiupLilin() {
+            // Matikan api
+            document.getElementById('flame').classList.add('off');
+            document.getElementById('instruksiTiup').innerText = "Fuuu~ Lilinnya padam! 💨";
+            
+            // Suara tiup
+            playTone(150, 0.4, 'triangle');
+
+            // Pindah ke pesan akhir setelah 1 detik
+            setTimeout(() => {
+                document.getElementById('step2').classList.remove('active');
+                document.getElementById('step3').classList.add('active');
+                document.getElementById('namaAkhir').innerText = `For: ${namaUtama} ❤️`;
+
+                // Mainkan musik & kembang api
+                playHappyBirthdaySong();
+                sebarConfetti();
+            }, 1000);
+        }
+
+        function sebarConfetti() {
+            var duration = 4 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 6,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                confetti({
+                    particleCount: 6,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            })();
+        }
+    </script>
+</body>
+</html>
